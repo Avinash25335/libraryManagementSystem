@@ -18,8 +18,8 @@ const Register = () => {
     setLoading(true);
     try {
       const res = await register(formData);
-      // Redirect to OTP verification. Not logged in yet.
-      navigate(`/verify-otp?email=${encodeURIComponent(res.email || formData.email)}`);
+      // Instant login applied! Route based on chosen role.
+      navigate(formData.role === 'admin' ? '/admin/dashboard' : '/dashboard');
     } catch (err) {
       const msg = err?.response?.data?.msg || err?.message || 'Registration failed. Please try again.';
       setError(msg);

@@ -19,19 +19,18 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ msg: 'User already exists with this email' });
     }
 
-    const otp = generateOTP();
-    const otpExpiry = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     if (user) {
-      // Unverified user re-registering — update their record
+      // Unverified user re-registering — update their record and auto-verify
       user.name = name;
       user.password = hashedPassword;
       // Allow only 'user' or 'admin' during public registration
       user.role = ['user', 'admin'].includes(role) ? role : 'user';
-      user.otp = otp;
-      user.otpExpiry = otpExpiry;
+      user.isVerified = true;
+      user.otp = null;
+      user.otpExpiry = null;
       await user.save();
     } else {
       user = new User({ 
@@ -39,14 +38,16 @@ router.post('/register', async (req, res) => {
         email, 
         password: hashedPassword, 
         role: ['user', 'admin'].includes(role) ? role : 'user', 
-        otp, 
-        otpExpiry 
+        isVerified: true 
       });
       await user.save();
     }
 
-    await sendOTPEmail(email, otp, 'Verify Your Email — LibraryPro');
-    res.json({ msg: 'OTP sent to your email. Please verify to complete registration.', email });
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' }, (err, token) => {
+      if (err) return res.status(500).json({ msg: 'Token error' });
+      res.json({ token, user: { id: user.id, name: user.name, role: user.role }, msg: 'Registration successful' });
+    });
   } catch (err) {
     console.error('Registration error:', err);
     res.status(500).json({ msg: 'Server error: ' + err.message });
