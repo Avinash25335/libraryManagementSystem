@@ -7,9 +7,10 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.trim() : 'http://localhost:5173';
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Adjust local port if needed
+  origin: frontendUrl,
   credentials: true
 }));
 app.use(express.json());
