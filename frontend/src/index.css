@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* Force Tailwind to use the .dark class instead of OS media queries */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =====================================
+   ROOT — PURE WHITE LIGHT MODE
+   ===================================== */
+html {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =====================================
+   DARK MODE
+   ===================================== */
+html.dark,
+html.dark body {
+  background-color: #020617;
+  color: #f1f5f9;
+}
+
+/* =====================================
+   GLASS / CARD
+   ===================================== */
+.glass {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  color: #0f172a;
+  transition: all 0.3s ease;
+}
+
+html.dark .glass {
+  background-color: #0f172a;
+  border-color: #1e293b;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  color: #f1f5f9;
+}
+
+/* =====================================
+   INPUTS — White in light mode
+   ===================================== */
+input, textarea, select {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+/* =====================================
+   SCROLLBAR
+   ===================================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 3px; }
+html.dark ::-webkit-scrollbar-thumb { background-color: #334155; }
+
+::selection { background-color: #3b82f6; color: white; }
