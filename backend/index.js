@@ -29,8 +29,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/books', require('./routes/books'));
 app.use('/api/borrow', require('./routes/borrow'));
 
-// Start server only if not in production (Vercel handles it as serverless)
-if (process.env.NODE_ENV !== 'production') {
+// Start server only if not in production, or if running on Render
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER === 'true') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
