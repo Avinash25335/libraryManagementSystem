@@ -18,8 +18,8 @@ const Register = () => {
     setLoading(true);
     try {
       const res = await register(formData);
-      // Instant login applied! Route based on chosen role.
-      navigate(formData.role === 'admin' ? '/admin/dashboard' : '/dashboard');
+      // Redirect to login page so the user can manually log in
+      navigate('/login');
     } catch (err) {
       const msg = err?.response?.data?.msg || err?.message || 'Registration failed. Please try again.';
       setError(msg);
@@ -117,7 +117,7 @@ const Register = () => {
             disabled={loading}
             className="w-full py-3 mt-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-bold rounded-xl transition-colors text-sm shadow-lg shadow-emerald-500/20"
           >
-            {loading ? 'Creating account...' : 'Register & Verify Email'}
+            {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
 
